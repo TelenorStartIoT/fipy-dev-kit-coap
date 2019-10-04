@@ -18,7 +18,7 @@ iot = StartIoT(network='lte-m')
 
 To use the NB-IoT network (assuming you have flashed the modem as described in the prerequisites):
 
-```
+``` python
 iot = StartIoT(network='nb-iot')
 ```
 
