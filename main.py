@@ -1,4 +1,4 @@
-from telenor import StartIot
+from telenor import StartIoT
 from uos import urandom
 from ujson import dumps
 from time import sleep
@@ -9,7 +9,7 @@ def run():
   # Instantiate a new Telenor Start IoT object using the LTE-M network.
   # Change the `network` parameter if you want to use the NB-IoT network
   # like this: iot = StartIoT(network=StartIoT.NB_IOT)
-  iot = StartIoT(network=StartIoT.LTE_M)
+  iot = StartIoT(network='lte-m')
 
   # Connect to the network
   print("Started connecting to the network...")

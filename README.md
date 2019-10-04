@@ -1,6 +1,6 @@
 # FiPy Dev-Kit UDP Example Code
 
-Pycom FiPy UDP over LTE-M (Cat M1) or NB-IoT example. The example sends UDP data packets over LTE-M (Cat M1) or NB-IoT network to Telenor Start IoT Managed IoT Cloud (MIC).
+The example sends UDP data packets over LTE-M (Cat M1) or NB-IoT network to Telenor Start IoT Managed IoT Cloud (MIC).
 
 ## Prerequsites
 
@@ -8,17 +8,29 @@ Your Pycom FiPy dev-kit contains a Sequans modem. This modem needs to be flashed
 
 Instructions on how to update or flash a different FiPy Sequans modem firmware can be found in the Pycom documentation here: https://docs.pycom.io/tutorials/lte/firmware/
 
-## Network Related Code Changes
+## Change Network Protocol
 
-The code in this repository reflects settings for the NB-IoT network in Telenor Norway. If your device will connect to a different network you will have to make some changes in [lib/telenor.py](./lib/telenor.py) to reflect this:
+The code will by default use the LTE-M network:
 
-  * Change band (from 20 to the band you are using)
-  * Change earfcn (from 6352 to your networks earfcn)
-  * Change APN name (from telenor.iotgw to your APN name)
-  * Change network shortname (from 24201 to your network shortname)
+``` python
+iot = StartIoT(network='lte-m')
+```
 
-Example:
+To use the NB-IoT network (assuming you have flashed the modem as described in the prerequisites):
 
 ```
-TODO :)
+iot = StartIoT(network='nb-iot')
+```
+
+## Network Related Code Changes
+
+The code in this repository reflects settings for the network in Telenor Norway. If your device will connect to a different network you will have to make some changes in [lib/telenor.py:10](./lib/telenor.py#L10) to reflect this:
+
+``` python
+# Network related configuration
+BAND = 20                 # Telenor NB-IoT band frequency
+APN = 'mda.ee'            # Telenor IoT Gateway APN (telenor.iotgw)
+IOTGW_IP = '172.16.15.14' # Telenor IoT Gateway IP address
+EARFCN = 6352             # Telenor E-UTRA Absolute Radio Frequency Channel Number
+COPS = 24201              # Telenor network shortname
 ```
