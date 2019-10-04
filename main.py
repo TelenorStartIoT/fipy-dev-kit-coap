@@ -7,10 +7,10 @@ from time import sleep
 def run():
   
   # Create a new Telenor Start IoT object using the LTE-M network.
-  # Change the `network` parameter if you want to use the NB-IoT network
-  # like this: iot = StartIoT(network='nb-iot')
-  # You must flash the correct Sequans modem firmware before changing
-  # network protocol!
+  # Change the `network` parameter if you want to use the NB-IoT
+  # network like this: iot = StartIoT(network='nb-iot')
+  # You must flash the correct Sequans modem firmware before
+  # changing network protocol!
   iot = StartIoT(network='lte-m')
 
   # Connect to the network
