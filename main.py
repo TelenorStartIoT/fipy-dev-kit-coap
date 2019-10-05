@@ -28,8 +28,8 @@ def run():
 
       # Create the data payload
       payload = {
-        "temperature": temperature,
-        "humidity": humidity
+        'temperature': temperature,
+        'humidity': humidity
       }
 
       # Format payload as a JSON string
