@@ -24,13 +24,13 @@ iot = StartIoT(network='nb-iot')
 
 ## Network Related Code Changes
 
-The code in this repository reflects settings for the network in Telenor Norway. If your device will connect to a different network you will have to make some changes in [lib/telenor.py:10](./lib/telenor.py#L10) to reflect this:
+The code in this repository reflects settings for the network in Telenor Norway. If your device will connect to a different network you will have to make some changes in [lib/telenor.py:11](./lib/telenor.py#L11) to reflect this:
 
 ``` python
 # Network related configuration
 BAND = 20                 # Telenor NB-IoT band frequency
-APN = 'mda.ee'            # Telenor IoT Gateway APN (telenor.iotgw)
-IOTGW_IP = '172.16.15.14' # Telenor IoT Gateway IP address
+APN = 'telenor.iotgw'     # Telenor IoT Gateway APN
+IOTGW_IP = ''             # Telenor IoT Gateway IP address
 EARFCN = 6352             # Telenor E-UTRA Absolute Radio Frequency Channel Number
 COPS = 24201              # Telenor network shortname
 ```
