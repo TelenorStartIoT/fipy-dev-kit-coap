@@ -10,8 +10,9 @@ NB_IOT = 'nb-iot'
 
 # Network related configuration
 BAND = 20                 # Telenor NB-IoT band frequency
-APN = 'mda.ee'            # Telenor IoT Gateway APN (telenor.iotgw)
+APN = 'telenor.iotgw'     # Telenor IoT Gateway APN
 IOTGW_IP = '172.16.15.14' # Telenor IoT Gateway IP address
+IOTGW_PORT = 1234         # Telenor IoT Gateway UDP port
 EARFCN = 6352             # Telenor E-UTRA Absolute Radio Frequency Channel Number
 COPS = 24201              # Telenor network shortname
 
@@ -103,7 +104,7 @@ class StartIoT:
       raise Exception('Not connected! Unable to send.')
 
     s = usocket.socket(usocket.AF_INET, usocket.SOCK_DGRAM, usocket.IPPROTO_UDP)
-    IP_ADDR = usocket.getaddrinfo(IOTGW_IP, 1234)[0][-1]
+    IP_ADDR = usocket.getaddrinfo(IOTGW_IP, IOTGW_PORT)[0][-1]
     s.connect(IP_ADDR)
     s.send(data)
     s.close()
