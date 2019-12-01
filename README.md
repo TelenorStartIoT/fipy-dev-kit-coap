@@ -1,6 +1,6 @@
 # FiPy Dev-Kit UDP Example Code
 
-The example sends UDP data packets over LTE-M (Cat M1) or NB-IoT network to Telenor Start IoT Managed IoT Cloud (MIC).
+The example sends UDP data packets over LTE-M (Cat M1) or NB-IoT network to Telenor Managed IoT Cloud (MIC).
 
 ## Prerequsites
 
