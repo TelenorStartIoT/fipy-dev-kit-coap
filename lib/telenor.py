@@ -1,7 +1,6 @@
 from network import LTE
 from time import sleep
-import sqnsupgrade
-import usocket
+import microcoapy
 
 
 # Network types chosen by user
@@ -9,19 +8,23 @@ LTE_M = 'lte-m'
 NB_IOT = 'nb-iot'
 
 # Network related configuration
-BAND = 20                 # Telenor NB-IoT band frequency
-APN = 'telenor.iotgw'     # Telenor IoT Gateway APN
-IOTGW_IP = '172.16.15.14' # Telenor IoT Gateway IP address
-IOTGW_PORT = 1234         # Telenor IoT Gateway UDP port
-EARFCN = 6352             # Telenor E-UTRA Absolute Radio Frequency Channel Number
-COPS = 24201              # Telenor network shortname
+BAND = 20                       # Telenor NB-IoT band frequency
+APN = 'telenor.iotgw'           # Telenor IoT Gateway APN
+IOTGW_IP = '172.16.32.1'        # Telenor IoT Gateway IP address
+IOTGW_PORT = 5683               # Telenor IoT Gateway UDP port
+IOTGW_ENDPOINT = '/request/uri' # Telenor IoT Gateway CoAP endpoint
+EARFCN = 6352                   # Telenor E-UTRA Absolute Radio Frequency Channel Number
+COPS = 24201                    # Telenor network shortname
 
 class StartIoT:
   def __init__(self, network=LTE_M):
     self._network = network
     self.lte = LTE()
-    self.lte.reset()
-    self.lte.send_at_cmd('AT^RESET')
+    try:
+      self.lte.deinit()
+      self.lte.reset()
+    except:
+      pass
     sleep(5)
 
     self.lte.init()
@@ -91,6 +94,11 @@ class StartIoT:
       sleep(0.25)
     print('Connected!')
 
+    self.client = microcoapy.Coap()
+    self.client.resposeCallback = self.callback
+    self.client.start()
+    print('Created CoAP client!')
+
   def disconnect(self):
     if self.lte.isconnected():
       self.lte.disconnect()
@@ -99,12 +107,16 @@ class StartIoT:
     if self.lte.isattached():
       self.lte.dettach()
 
+  def callback(self, packet, sender):
+    print('Message received:', packet, ', from: ', sender)
+    print('Mesage payload: ', packet.payload.decode('unicode_escape'))
+
   def send(self, data):
     if not self.lte.isconnected():
       raise Exception('Not connected! Unable to send.')
 
-    s = usocket.socket(usocket.AF_INET, usocket.SOCK_DGRAM, usocket.IPPROTO_UDP)
-    IP_ADDR = usocket.getaddrinfo(IOTGW_IP, IOTGW_PORT)[0][-1]
-    s.connect(IP_ADDR)
-    s.send(data)
-    s.close()
+    # Send a request to a CoAP server
+    nBytes = self.client.post(IOTGW_IP, IOTGW_PORT, IOTGW_ENDPOINT, data)
+    print('[POST] Sent bytes: ', nBytes)
+
+    self.client.poll(2000)
