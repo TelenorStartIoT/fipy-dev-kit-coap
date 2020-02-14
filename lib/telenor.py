@@ -1,6 +1,6 @@
 from network import LTE
 from time import sleep
-import microcoapy
+from network import Coap
 
 
 # Network types chosen by user
@@ -49,6 +49,20 @@ class StartIoT:
     else:
       print('Failed to determine modem firmware. Please reboot your device manually.')
 
+  def _get_assigned_ip(self):
+    ip_address = None
+    try:
+      self.lte.pppsuspend()
+      response = self.send_at_cmd_pretty('AT+CGPADDR=1')
+      self.lte.pppresume()
+      lines = response.split('\r\n')
+      sections = lines[1].split('"')
+      ip_address = sections[1]
+    except:
+      print('Failed to retrieve assigned IP from LTE network.')
+
+    return ip_address
+
   def send_at_cmd_pretty(self, cmd):
     print('>', cmd)
     response = self.lte.send_at_cmd(cmd)
@@ -69,6 +83,7 @@ class StartIoT:
       self.send_at_cmd_pretty('AT+CEMODE?')
       self.send_at_cmd_pretty('AT!="clearscanconfig"')
       self.send_at_cmd_pretty('AT!="addscanfreq band=%s dl-earfcn=%s"' % (BAND, EARFCN))
+      # AT!="addscanfreqrange band=20 dl-earfcn-min=3450 dl-earfcn-max=6352"
       self.send_at_cmd_pretty('AT+CGDCONT=1,"IP","%s"' % APN)
       self.send_at_cmd_pretty('AT+COPS=1,2,"%s"' % COPS)
       self.send_at_cmd_pretty('AT+CFUN=1')
@@ -94,10 +109,26 @@ class StartIoT:
       sleep(0.25)
     print('Connected!')
 
-    self.client = microcoapy.Coap()
-    self.client.resposeCallback = self.callback
-    self.client.start()
-    print('Created CoAP client!')
+    print('Retrieving assigned IP...')
+    ip_address = self._get_assigned_ip()
+
+    print("Device IP: {}".format(ip_address))
+    print(ip_address)
+
+    # Initialise the CoAP module
+    Coap.init(ip_address)
+
+    # Register the response handler for the requests that the module initiates as a CoAP Client
+    Coap.register_response_handler(self.response_callback)
+
+  # The callback that handles the responses generated from the requests sent to a CoAP Server
+  def response_callback(self, code, id_param, type_param, token, payload):
+    print('Code: {}'.format(code))
+    # The ID can be used to pair the requests with the responses
+    print('ID: {}'.format(id_param))
+    print('Type: {}'.format(type_param))
+    print('Token: {}'.format(token))
+    print('Payload: {}'.format(payload))
 
   def disconnect(self):
     if self.lte.isconnected():
@@ -107,16 +138,9 @@ class StartIoT:
     if self.lte.isattached():
       self.lte.dettach()
 
-  def callback(self, packet, sender):
-    print('Message received:', packet, ', from: ', sender)
-    print('Mesage payload: ', packet.payload.decode('unicode_escape'))
-
   def send(self, data):
     if not self.lte.isconnected():
       raise Exception('Not connected! Unable to send.')
 
-    # Send a request to a CoAP server
-    nBytes = self.client.post(IOTGW_IP, IOTGW_PORT, IOTGW_ENDPOINT, data)
-    print('[POST] Sent bytes: ', nBytes)
-
-    self.client.poll(2000)
+    id = Coap.send_request(IOTGW_IP, Coap.REQUEST_POST, uri_port=IOTGW_PORT, uri_path=IOTGW_ENDPOINT, payload=data, include_options=True)
+    print('CoAP message ID: {}'.format(id))

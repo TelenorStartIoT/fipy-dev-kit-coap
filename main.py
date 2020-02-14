@@ -45,7 +45,7 @@ def run():
       print('Caugh exception:', e)
 
     # Wait 10 seconds before running loop again
-    sleep(10)
+    sleep(4)
 
 # The example code will start here
 print('Running example code...')
