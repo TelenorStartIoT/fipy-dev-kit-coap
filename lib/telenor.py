@@ -8,7 +8,7 @@ LTE_M = 'lte-m'
 NB_IOT = 'nb-iot'
 
 # Network related configuration
-BAND = 20                       # Telenor NB-IoT band frequency
+BAND = 20                       # Telenor NB-IoT band frequency (use band 28 if you are in Finnmark)
 APN = 'telenor.iotgw'           # Telenor IoT Gateway APN
 IOTGW_IP = '172.16.32.1'        # Telenor IoT Gateway IP address
 IOTGW_PORT = 5683               # Telenor IoT Gateway CoAP port
@@ -83,7 +83,6 @@ class StartIoT:
       self.send_at_cmd_pretty('AT+CEMODE?')
       self.send_at_cmd_pretty('AT!="clearscanconfig"')
       self.send_at_cmd_pretty('AT!="addscanfreq band=%s dl-earfcn=%s"' % (BAND, EARFCN))
-      # AT!="addscanfreqrange band=20 dl-earfcn-min=3450 dl-earfcn-max=6352"
       self.send_at_cmd_pretty('AT+CGDCONT=1,"IP","%s"' % APN)
       self.send_at_cmd_pretty('AT+COPS=1,2,"%s"' % COPS)
       self.send_at_cmd_pretty('AT+CFUN=1')
@@ -91,11 +90,14 @@ class StartIoT:
     # LTE-M (Cat M1)
     else:
       self.send_at_cmd_pretty('AT+CFUN=0')
+      self.send_at_cmd_pretty('AT!="clearscanconfig"')
+      self.send_at_cmd_pretty('AT!="addscanfreq band=%s dl-earfcn=%s"' % (BAND, EARFCN))
       self.send_at_cmd_pretty('AT+CGDCONT=1,"IP","%s"' % APN)
       self.send_at_cmd_pretty('AT+CFUN=1')
       self.send_at_cmd_pretty('AT+CSQ')
 
-    # self.lte.attach(band=BAND, apn=APN)
+    # For a range scan:
+    # AT!="addscanfreqrange band=20 dl-earfcn-min=3450 dl-earfcn-max=6352"
 
     print('Attaching...')
     while not self.lte.isattached():
