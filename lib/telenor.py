@@ -8,7 +8,7 @@ LTE_M = 'lte-m'
 NB_IOT = 'nb-iot'
 
 # Network related configuration
-BAND = 20                       # Telenor NB-IoT band frequency (use band 28 if you are in Finnmark)
+BAND = 20                       # Telenor NB-IoT band frequency (use band 28 if you are in Finnmark close to the Russian border)
 APN = 'telenor.iotgw'           # Telenor IoT Gateway APN
 IOTGW_IP = '172.16.32.1'        # Telenor IoT Gateway IP address
 IOTGW_PORT = 5683               # Telenor IoT Gateway CoAP port
