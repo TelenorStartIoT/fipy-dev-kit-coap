@@ -32,7 +32,7 @@ def run():
   while True:
 
     try:
-      # Generate random data (Delete/comment out these lines once you activate the sensor code)
+      # Generate random data (Delete/comment out these lines once you activate the sensor readings)
       temperature = ((urandom(1)[0] / 256) * 10) + 20
       humidity = ((urandom(1)[0] / 256) * 10) + 60
       
