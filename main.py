@@ -3,6 +3,16 @@ from uos import urandom
 from ujson import dumps
 from time import sleep
 
+# Imports for sensor
+import pycom
+from machine import Pin
+from dth import DTH
+
+## Configurations for the sensor
+# pycom.heartbeat(False)
+# pycom.rgbled(0x000008) # blue
+# th = DTH('P3',0)
+# time.sleep(2)
 
 def run():
 
@@ -22,9 +32,17 @@ def run():
   while True:
 
     try:
-      # Generate random data
+      # Generate random data (Delete/comment out these lines once you activate the sensor code)
       temperature = ((urandom(1)[0] / 256) * 10) + 20
       humidity = ((urandom(1)[0] / 256) * 10) + 60
+      
+      ## Activate the sensor readings
+      # result = th.read()
+      # if result.is_valid():
+      # pycom.rgbled(0x001000) # green
+      # print("Temperature: %d C" % result.temperature)
+      # print("Humidity: %d %%" % result.humidity)
+
 
       # Create the data payload
       payload = {
