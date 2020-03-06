@@ -38,6 +38,8 @@ def run():
       
       ## Activate the sensor readings
       # result = th.read()
+      # temperature = result.temperature
+      # humidity = result.humidity
       # if result.is_valid():
       # pycom.rgbled(0x001000) # green
       # print("Temperature: %d C" % result.temperature)
