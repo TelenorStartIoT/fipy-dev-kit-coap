@@ -34,5 +34,5 @@ IOTGW_IP = '172.16.32.1'        # Telenor IoT Gateway IP address
 IOTGW_PORT = 5683               # Telenor IoT Gateway CoAP port
 IOTGW_ENDPOINT = '/'            # Telenor IoT Gateway CoAP endpoint
 EARFCN = 6352                   # Telenor E-UTRA Absolute Radio Frequency Channel Number
-COPS = 24201                    # Telenor network shortname
+COPS = 24201                    # Telenor Norway MNC-MCC
 ```
