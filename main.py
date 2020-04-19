@@ -61,12 +61,15 @@ def run():
       # Send JSON string over the network
       iot.send(json)
 
+      # CoAP pull will manually pull down any queued messages
+      iot.pull()
+
     # Handle exception (if an error occured)
     except Exception as e:
       print('Caugh exception:', e)
 
     # Wait 10 seconds before running loop again
-    sleep(4)
+    sleep(10)
 
 # The example code will start here
 print('Running example code...')
