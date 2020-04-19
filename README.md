@@ -36,3 +36,15 @@ IOTGW_ENDPOINT = '/'            # Telenor IoT Gateway CoAP endpoint
 EARFCN = 6352                   # Telenor E-UTRA Absolute Radio Frequency Channel Number
 COPS = 24201                    # Telenor Norway MNC-MCC
 ```
+
+## Downlink Messages
+
+When using CoAP there are two ways you can get messages downlink from Telenor Managed IoT Cloud to your FiPy device; CoAP pull and CoAP push. A starting point for each transport method is included but the functionality vary depending on your use-case and it most likely requires some modification to the code on your side.
+
+### CoAP Pull
+
+If messages are sent downlink from Telenor Managed IoT Cloud using the `coap-pull` transport they will end up in a queue. The device is then responsible for pulling messages from this queue. This can be done by invoking the `StartIoT.pull(path='/')` method, which in turn will make a CoAP GET request that will return any potentially queued massages.
+
+### CoAP Push
+
+If messages are sent downlink from Telenor Managed IoT Cloud using the `coap-push` transport they will be sent directly to the device. The device must then implement a CoAP server which can handle incoming CoAP requests from the IoT Gateway. By invoking the `StartIoT.setup_coap_server()` method a simple CoAP server will be setup.
